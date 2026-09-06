@@ -1,9 +1,9 @@
-name: Build APK
+name: Android Build
 
 on:
   push:
-    branches: [ main, master ]
-    tags: [ 'v*' ]
+    branches: [master, main]
+    tags: ['v*']
   pull_request:
   workflow_dispatch:
 
@@ -20,31 +20,15 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-
-      # 仓库内 gradle wrapper 的 distributionUrl 默认指向腾讯云镜像（方便国内用户本地构建）；
-      # GitHub 海外 runner 改用官方源更快更稳。
-      - name: Use official Gradle distribution URL on CI
-        run: |
-          sed -i 's|distributionUrl=.*|distributionUrl=https\\://services.gradle.org/distributions/gradle-8.14.3-bin.zip|' gradle/wrapper/gradle-wrapper.properties
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Build debug APK
-        run: ./gradlew assembleDebug --no-daemon
+        run: ./gradlew :app:assembleDebug --no-daemon
 
-      - name: Upload debug APK (artifact)
+      - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: dotdash-cn-debug-apk
+          name: dotdash-cn-debug
           path: app/build/outputs/apk/debug/app-debug.apk
-
-      - name: Build release APK (unsigned)
-        if: startsWith(github.ref, 'refs/tags/')
-        run: ./gradlew assembleRelease --no-daemon
-
-      - name: Upload release APK (artifact)
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: actions/upload-artifact@v4
-        with:
-          name: dotdash-cn-release-apk
-          path: app/build/outputs/apk/release/app-release-unsigned.apk
+          if-no-files-found: error

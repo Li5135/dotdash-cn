@@ -1,19 +1,29 @@
+点点划键盘（DotDash CN）二次开发说明
+------------------------------------
+
+本项目是 agwells/dotdash-keyboard-android
+（Copyright (C) 2012-2015 Aaron Wells，GPL-3.0-or-later，https://github.com/agwells/dotdash-keyboard-android）
+的中文二次开发分支：重做键盘布局与输入模型（点/划 + 分号强制分割、中文拼音候选、
+多页符号面板），并沿用 GPL-3.0-or-later 发布（见 LICENSE）。
+
+拼音词典数据（app/src/main/assets/dict/，均 MIT 许可）：
+- fxsjy/jieba dict.txt —— 词频参考（Copyright (c) 2013 Sun Junyi）
+- mozillazg/pinyin-data kXHC1983.txt —— 汉字拼音（Copyright (c) 2016 mozillazg）
+- mozillazg/phrase-pinyin-data pinyin.txt —— 词语拼音（Copyright (c) 2017 mozillazg）
+
+上游 Apache 声明
+----------------
+
 Some components of this program are derived from the Android Open Source Project
 (specifically the LatinIMEKeyboard), and the Hacker's Keyboard project. As such, those
 portions are distributed under the terms of the Apache License. Non-binary files
 that meet this description have a relevant notice at the top of the file.
 
-The following binary files (which cannot contain a notice) are derived from the 
+The following binary files (which cannot contain a notice) are derived from the
 AOSP and distributed under the terms of the Apache License:
 
-1. All .xcf files under /Documents (derived from graphics in the AOSP)
-2. All .png files under /res EXCEPT for:
-2a. ic_launcher.png
-2b. sym_keyboard_dot.png
-2c. sym_keyboard_dash.png
-
-Additionally, the .xcf files, and the .png files with names starting with "dotdash", have
-been modified by me.
+1. All *.9.png files under res/drawable-*/ (keyboard key & background nine-patches)
+2. ic_launcher.png under res/drawable-ldpi/ (originally derived from AOSP graphics)
 
 The following notice applies to the portions of this project that are
 distributed under the terms of the Apache License.
