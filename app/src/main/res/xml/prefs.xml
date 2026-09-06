@@ -1,83 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <CheckBoxPreference
-        android:key="autocap"
-        android:title="@string/autocap"
-        android:summary="@string/autocap_summary"
-        android:defaultValue="false"
-        android:persistent="true"
-    />
+    <ListPreference
+        android:key="default_mode"
+        android:title="@string/pref_default_mode"
+        android:summary="@string/pref_default_mode_summary"
+        android:entries="@array/mode_labels"
+        android:entryValues="@array/mode_values"
+        android:defaultValue="0"
+        android:persistent="true" />
 
-    <CheckBoxPreference
-        android:key="dashkeyonleft"
-        android:title="@string/dash_key_on_left"
-        android:summary="@string/dash_key_on_left_summary"
-        android:defaultValue="false"
-        android:persistent="true"
-    />
-        
-    <org.pocketworkstation.pckeyboard.AutoSummaryListPreference
-        android:key="ditdahchars"
-        android:title="@string/dit_dah_chars"
-        android:entries="@array/dit_dah_chars_labels"
-        android:entryValues="@array/dit_dah_chars_values"
-        android:defaultValue="1"
-        android:persistent="true"
-    />
-    
-    <org.pocketworkstation.pckeyboard.AutoSummaryListPreference
-        android:key="newline"
-        android:title="@string/newline" 
-        android:entries="@array/newline_labels"
-        android:entryValues="@array/newline_values"
-        android:defaultValue=".-.-"
-        android:persistent="true"
-    />
-    
-    <CheckBoxPreference 
-        android:key="enableutilkbd"
-        android:title="@string/enable_util_kbd"
-        android:summary="@string/enable_util_kbd_summary"
-        android:defaultValue="false"
-        android:persistent="true"
-    />
-
-    <CheckBoxPreference 
-        android:key="audio"
-        android:title="Enable audio"
-        android:defaultValue="false"
-        android:persistent="true"
-    />
-    
-    <CheckBoxPreference
-        android:key="audioonlyonheadphones"
-        android:title="Only on headphones"
-        android:defaultValue="true"
-        android:persistent="true"
-        android:dependency="audio" 
-    />
-
-    <CheckBoxPreference
-        android:key="iambic"
-        android:title="Iambic"
-        android:defaultValue="false"
-        android:persistent="true"
-    />
-    
-    <CheckBoxPreference
-        android:key="iambicmodeb"
-        android:title="Iambic Mode B"
-        android:defaultValue="false"
-        android:persistent="true"
-        android:dependency="iambic"
-    />
-    
-    <CheckBoxPreference
-        android:key="autocommit"
-        android:title="Autocommit code groups"
-        android:defaultValue="false"
-        android:persistent="true"
-    />
-    
 </PreferenceScreen>

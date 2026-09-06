@@ -1,28 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
-
-    <string-array name="newline_labels">
-        <!-- TODO: Update the Preferences so that this label changes
-        depending on your Unicode/ASCII display pref -->
-        <item>. - . - or . - . - . .</item>
-        <item>. - . -</item>
-        <item>. - . - . .</item>
-        <item>No newline character</item>
+<resources>
+    <string-array name="mode_labels">
+        <item>中文（拼音）</item>
+        <item>英文（字母）</item>
     </string-array>
-    <string-array name="newline_values">
-        <item>.-.-|.-.-..</item>
-        <item>.-.-</item>
-        <item>.-.-..</item>
-        <item>X</item>
-    </string-array>
-    
-    <string-array name="dit_dah_chars_labels">
-        <item>Unicode (···–––···)</item>
-        <item tools:ignore="TypographyEllipsis">ASCII (. . . - - - . . .)</item>
-    </string-array>
-    <string-array name="dit_dah_chars_values">
+    <string-array name="mode_values">
+        <item>0</item>
         <item>1</item>
-        <item>2</item>
     </string-array>
-    
 </resources>

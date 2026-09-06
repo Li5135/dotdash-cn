@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 本文件由 tools/gen_symbol_pages.py 自动生成，请勿手改。 -->
+<Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
+    android:horizontalGap="0px"
+    android:verticalGap="0px">
+
+    <Row android:keyHeight="54dp" android:rowEdgeFlags="top">
+        <Key android:keyLabel="，" android:keyWidth="12.500%" android:codes="65292" android:keyEdgeFlags="left" />
+        <Key android:keyLabel="。" android:keyWidth="12.500%" android:codes="12290" />
+        <Key android:keyLabel="、" android:keyWidth="12.500%" android:codes="12289" />
+        <Key android:keyLabel="？" android:keyWidth="12.500%" android:codes="65311" />
+        <Key android:keyLabel="！" android:keyWidth="12.500%" android:codes="65281" />
+        <Key android:keyLabel="：" android:keyWidth="12.500%" android:codes="65306" />
+        <Key android:keyLabel="；" android:keyWidth="12.500%" android:codes="65307" />
+        <Key android:keyLabel="～" android:keyWidth="12.500%" android:codes="65374" android:keyEdgeFlags="right" />
+    </Row>
+
+    <Row android:keyHeight="54dp">
+        <Key android:keyLabel="“" android:keyWidth="12.500%" android:codes="8220" android:keyEdgeFlags="left" />
+        <Key android:keyLabel="”" android:keyWidth="12.500%" android:codes="8221" />
+        <Key android:keyLabel="‘" android:keyWidth="12.500%" android:codes="8216" />
+        <Key android:keyLabel="’" android:keyWidth="12.500%" android:codes="8217" />
+        <Key android:keyLabel="（" android:keyWidth="12.500%" android:codes="65288" />
+        <Key android:keyLabel="）" android:keyWidth="12.500%" android:codes="65289" />
+        <Key android:keyLabel="【" android:keyWidth="12.500%" android:codes="12304" />
+        <Key android:keyLabel="】" android:keyWidth="12.500%" android:codes="12305" android:keyEdgeFlags="right" />
+    </Row>
+
+    <Row android:keyHeight="54dp">
+        <Key android:keyLabel="《" android:keyWidth="14.286%" android:codes="12298" android:keyEdgeFlags="left" />
+        <Key android:keyLabel="》" android:keyWidth="14.286%" android:codes="12299" />
+        <Key android:keyLabel="—" android:keyWidth="14.286%" android:codes="8212" />
+        <Key android:keyLabel="…" android:keyWidth="14.286%" android:codes="8230" />
+        <Key android:keyLabel="·" android:keyWidth="14.286%" android:codes="183" />
+        <Key android:keyLabel="￥" android:keyWidth="14.286%" android:codes="65509" />
+        <Key android:keyLabel="℃" android:keyWidth="14.286%" android:codes="8451" android:keyEdgeFlags="right" />
+    </Row>
+
+    <Row android:keyHeight="54dp">
+        <Key android:keyLabel="①" android:keyWidth="12.500%" android:codes="9312" android:keyEdgeFlags="left" />
+        <Key android:keyLabel="②" android:keyWidth="12.500%" android:codes="9313" />
+        <Key android:keyLabel="③" android:keyWidth="12.500%" android:codes="9314" />
+        <Key android:keyLabel="④" android:keyWidth="12.500%" android:codes="9315" />
+        <Key android:keyLabel="⑤" android:keyWidth="12.500%" android:codes="9316" />
+        <Key android:keyLabel="⑥" android:keyWidth="12.500%" android:codes="9317" />
+        <Key android:keyLabel="⑦" android:keyWidth="12.500%" android:codes="9318" />
+        <Key android:keyLabel="⑧" android:keyWidth="12.500%" android:codes="9319" android:keyEdgeFlags="right" />
+    </Row>
+
+    <Row android:keyHeight="50dp" android:rowEdgeFlags="bottom">
+        <Key android:keyLabel="返回" android:keyWidth="25%" android:codes="-203" android:keyEdgeFlags="left" />
+        <Key android:keyLabel="‹" android:keyWidth="25%" android:codes="-204" />
+        <Key android:keyLabel="1/3" android:keyWidth="25%" android:codes="-206" />
+        <Key android:keyLabel="›" android:keyWidth="25%" android:codes="-205" android:keyEdgeFlags="right" />
+    </Row>
+
+</Keyboard>

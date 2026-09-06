@@ -1,11 +1,13 @@
-<net.iowaline.dotdash.DotDashKeyboardView
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 输入视图：只包含一个标准 KeyboardView（候选条由 IME 的候选区承载） -->
+<android.inputmethodservice.KeyboardView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_alignParentBottom="true"
-    android:layout_width="fill_parent"
+    android:id="@+id/keyboard"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/keyboard_background_holo"
     android:keyBackground="@drawable/dotdash_key"
     android:keyTextColor="@color/key_text_color_holo"
     android:keyTextSize="22sp"
-    android:labelTextSize="22sp"
-/>
+    android:labelTextSize="18sp"
+    android:previewEnabled="false" />

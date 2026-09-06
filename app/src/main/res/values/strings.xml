@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">DotDash Keyboard</string>
-    <string name="caps_lock_off">caps</string>
-    <string name="caps_lock_next">Caps</string>
-    <string name="caps_lock_all">CAPS</string>
-    <string name="tap_for_punctuation">Tap for punctuation</string>
-    <string name="tap_for_letters_and_numbers">Tap for letters and numbers</string>
+    <string name="app_name">点点划键盘</string>
 
-    <string name="autocap">Auto-capitalize</string>
-    <string name="autocap_summary">Automatically capitalize the first word in each sentence.</string>
-    <string name="newline">Carriage return</string>
-    <string name="enable_util_kbd">Enable utility keyboard (experimental)</string>
-	<string name="enable_util_kbd_summary">Enable the utility keyboard. Swipe left or right to access it. It may still be a little buggy.</string>
-	<string name="enter">Enter</string>
-    <string name="newline_disabled">disabled</string>
-    <string name="dit_dah_chars">Unicode or ASCII display</string>
-    <string name="dash_key_on_left">Dash key on the left</string>
-    <string name="dash_key_on_left_summary">By default the Dot key is on the left and the Dash key is on the right. Enable this if you\'d rather have the Dash key on the left and the Dot key on the right.</string>
+    <!-- 键帽 -->
+    <string name="space_key">空格</string>
+    <string name="mode_label_pinyin">中</string>
+    <string name="mode_label_latin">EN</string>
+    <string name="no_candidate">无匹配词条</string>
+
+    <!-- 设置 -->
+    <string name="pref_default_mode">默认输入模式</string>
+    <string name="pref_default_mode_summary">启动键盘时使用的模式（“中”可输入拼音；“EN”直接输入字母）</string>
+    <string name="pref_mode_pinyin">中文（拼音）</string>
+    <string name="pref_mode_latin">英文（字母）</string>
+
+    <!-- 使用引导 -->
+    <string name="usage_title">点点划键盘 · 使用说明</string>
+    <string name="usage_enable">启用输入法</string>
+    <string name="usage_intro">主键盘只有四个操作键：\n\n• 点（·）与 划（–）：每敲完一个字母的点划组合，按一次 分号（；）键立即翻译成字母；\n• 分号（；）：强制分割，废除一切“等待超时”；\n• 退格：删掉刚敲的点划或拼音；\n\n中文模式：字母进入拼音缓冲区，自动切分并弹出候选词，按 空格 上屏第一个候选，也可以直接点候选词；\n英文模式：字母直接上屏；\n符号：全部在“符”键展开的多页符号面板里，点一下直接上屏。\n\n中/英 键随时切换输入模式。</string>
 
 </resources>

@@ -1,70 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-/* 
-**
-** Copyright 2008, The Android Open Source Project
-**
-** Licensed under the Apache License, Version 2.0 (the "License"); 
-** you may not use this file except in compliance with the License. 
-** You may obtain a copy of the License at 
-**
-**     http://www.apache.org/licenses/LICENSE-2.0 
-**
-** Unless required by applicable law or agreed to in writing, software 
-** distributed under the License is distributed on an "AS IS" BASIS, 
-** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
-** See the License for the specific language governing permissions and 
-** limitations under the License.
-*/
+  点点划键盘 · 主键盘布局
+
+  版式（每行键宽合计 100%）：
+    Row1: [，16%]  [ · 点  42% ] [ – 划  42% ]
+    Row2: [。16%]  [ ；分号 42%] [ ⌫ 退格 42%]
+    Row3: [？16%]  [   空格   84%]
+    Row4: [！16%]  [ 中⇄英 42%] [ 符   42%]
+
+  左侧第 1 列纵向固定 4 个常用符号：，。？！
+  （上方候选区会显示候选词/拼音；符号面板由底部"符"键展开。）
+
+  键码约定见 net.iowaline.dotdash.cn.DotDashIMEService：
+    0/1 = 点/划（沿用 DotDash 原约定）
+    32  = 空格，67 = 退格
+    -200 分号（强制分割当前点划序列）
+    -201 中/英切换，-202 打开符号面板
 -->
+<Keyboard
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:horizontalGap="0px"
+    android:verticalGap="0px">
 
-<Keyboard 
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:horizontalGap="0px"
-	android:verticalGap="0px" 
-	>
+    <Row
+        android:keyHeight="62dp"
+        android:rowEdgeFlags="top">
+        <Key
+            android:keyLabel="，"
+            android:keyEdgeFlags="left"
+            android:keyWidth="16%"
+            android:codes="65292" />
+        <Key
+            android:keyLabel="·"
+            android:keyWidth="42%"
+            android:codes="0" />
+        <Key
+            android:keyLabel="–"
+            android:keyWidth="42%"
+            android:codes="1"
+            android:keyEdgeFlags="right" />
+    </Row>
 
-	<Row
-		android:keyWidth="50%"
-		android:rowEdgeFlags="top"
-		android:keyHeight="20%"
-	>
-		<Key
-		    android:keyIcon="@drawable/sym_keyboard_dot"
-			android:keyEdgeFlags="left"
-			android:codes="0"
-			/>
-		<Key
-			android:keyIcon="@drawable/sym_keyboard_dash"
-			android:keyEdgeFlags="right"
-			android:codes="1"
-			/>
-	</Row>
+    <Row android:keyHeight="56dp">
+        <Key
+            android:keyLabel="。"
+            android:keyEdgeFlags="left"
+            android:keyWidth="16%"
+            android:codes="12290" />
+        <Key
+            android:keyLabel="；"
+            android:keyWidth="42%"
+            android:codes="-200" />
+        <Key
+            android:keyLabel="⌫"
+            android:keyWidth="42%"
+            android:codes="67"
+            android:isRepeatable="true"
+            android:keyEdgeFlags="right" />
+    </Row>
 
-	<Row
-		android:keyWidth="25%"
-		android:rowEdgeFlags="bottom"
-		android:keyHeight="17%"
-	>
-		<Key
-			android:keyLabel="@string/caps_lock_off"
-			android:keyEdgeFlags="left"
-			android:codes="59"
-			android:isSticky="true"
-			/>
-		<Key
-			android:keyLabel=" "
-			android:codes="62"
-			android:keyWidth="50%"
-            android:isRepeatable="false"
-			/>
-		<Key
-			android:keyIcon="@drawable/sym_keyboard_delete"
-			android:keyEdgeFlags="right"
-			android:isRepeatable="true"
-			android:codes="67"
-		/>
-	</Row>
+    <Row android:keyHeight="52dp">
+        <Key
+            android:keyLabel="？"
+            android:keyEdgeFlags="left"
+            android:keyWidth="16%"
+            android:codes="65311" />
+        <Key
+            android:keyLabel="空格"
+            android:keyWidth="84%"
+            android:codes="32"
+            android:keyEdgeFlags="right" />
+    </Row>
+
+    <Row
+        android:keyHeight="52dp"
+        android:rowEdgeFlags="bottom">
+        <Key
+            android:keyLabel="！"
+            android:keyEdgeFlags="left"
+            android:keyWidth="16%"
+            android:codes="65281" />
+        <Key
+            android:keyLabel="中"
+            android:keyWidth="42%"
+            android:codes="-201" />
+        <Key
+            android:keyLabel="符"
+            android:keyWidth="42%"
+            android:codes="-202"
+            android:keyEdgeFlags="right" />
+    </Row>
 
 </Keyboard>
-    
