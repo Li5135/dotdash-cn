@@ -284,7 +284,8 @@ public class DotDashIMEService extends InputMethodService implements
         if (mode == MODE_PINYIN && pinyin.length() > 0) {
             PinyinEngine.Result r = engine.getLastResult();
             if (r.candidates.isEmpty()) {
-                // 缓冲无法切分/无候选：不吞掉按键，交给应用层空格
+                // 缓冲无法切分/无候选：放弃当前缓冲（避免残留污染后续输入），输出空格
+                clearPinyin();
                 commitText(" ");
                 return;
             }
