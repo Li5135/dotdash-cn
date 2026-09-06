@@ -9,5 +9,4 @@
     android:keyBackground="@drawable/dotdash_key"
     android:keyTextColor="@color/key_text_color_holo"
     android:keyTextSize="22sp"
-    android:labelTextSize="18sp"
-    android:previewEnabled="false" />
+    android:labelTextSize="18sp" />

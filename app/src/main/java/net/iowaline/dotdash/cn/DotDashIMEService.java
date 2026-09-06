@@ -120,8 +120,12 @@ public class DotDashIMEService extends InputMethodService implements
                     engine.load(syl, dict);
                 } catch (IOException e) {
                     // 词典缺失/损坏时引擎保持空，中文候选自然为空，不影响其它功能
-                    engine.load(new java.io.ByteArrayInputStream(new byte[0]),
-                            new java.io.ByteArrayInputStream(new byte[0]));
+                    try {
+                        engine.load(new java.io.ByteArrayInputStream(new byte[0]),
+                                new java.io.ByteArrayInputStream(new byte[0]));
+                    } catch (IOException ignored) {
+                        // 不可能发生（空流）
+                    }
                 }
             }
         }, "pinyin-dict-loader");
