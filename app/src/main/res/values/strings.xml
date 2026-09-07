@@ -8,6 +8,7 @@
     <string name="mode_label_pinyin">中</string>
     <string name="mode_label_latin">EN</string>
     <string name="no_candidate">无匹配词条</string>
+    <string name="hint_morse_input">点划输入，按；提交</string>
 
     <!-- 设置 -->
     <string name="pref_default_mode">默认输入模式</string>

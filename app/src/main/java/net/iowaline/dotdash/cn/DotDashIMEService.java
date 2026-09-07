@@ -7,9 +7,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
-import android.widget.HorizontalScrollView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -83,9 +80,9 @@ public class DotDashIMEService extends InputMethodService implements
     private Keyboard.Key langKey;
     private int langKeyIndex = -1;
 
-    private HorizontalScrollView candidateScroll;
-    private LinearLayout candidateBar;
-    private boolean candidatesViewReady = false;
+    private CandidateBarView candidateView;
+    /** 候选栏显示状态（避免每次按键反复触发布局切换） */
+    private boolean candidatesShownState = false;
 
     // ------------------------------------------------------------------
     // 输入状态
@@ -183,13 +180,18 @@ public class DotDashIMEService extends InputMethodService implements
 
     @Override
     public View onCreateCandidatesView() {
-        View v = getLayoutInflater().inflate(R.layout.candidates, null);
-        candidateScroll = v.findViewById(R.id.candidate_scroll);
-        candidateBar = v.findViewById(R.id.candidate_bar);
-        candidatesViewReady = true;
-        // 视图就绪后立即按当前状态刷新（例如由 setCandidatesViewShown(true) 触发创建的场景）
+        // 直接构建自绘候选栏：内容渲染/点击/滚动均在 CandidateBarView 内部完成，
+        // 每次数据更新都会 invalidate 强制重绘，避免系统候选区 TextView 布局不刷新的问题。
+        candidateView = new CandidateBarView(this);
+        candidateView.setOnCandidateClickListener(new CandidateBarView.OnCandidateClickListener() {
+            @Override
+            public void onCandidateClick(int index) {
+                commitCandidate(index);
+            }
+        });
+        // 视图就绪后立即按当前输入状态刷新一次
         updateCandidates();
-        return v;
+        return candidateView;
     }
 
     // ------------------------------------------------------------------
@@ -385,82 +387,35 @@ public class DotDashIMEService extends InputMethodService implements
     // 候选条
     // ------------------------------------------------------------------
     private void updateCandidates() {
-        // 先让引擎与当前缓冲同步（无论候选条是否可见，保证 getLastResult 有效）
+        // 让引擎与当前缓冲同步（保证 getLastResult 有效）
         PinyinEngine.Result r = engine.update(pinyin.toString());
 
-        boolean show = mode == MODE_PINYIN && pinyin.length() > 0 && !isOnSymbolKeyboard();
-        if (!candidatesViewReady) {
-            // 候选视图尚未创建：先让系统惰性创建（setCandidatesViewShown(true)
-            // 会触发 onCreateCandidatesView，其末尾会再次调用本方法完成填充）
-            setCandidatesViewShown(show);
-            return;
-        }
-        if (!show) {
-            setCandidatesViewShown(false);
+        boolean pinyinMode = mode == MODE_PINYIN && !isOnSymbolKeyboard();
+        setCandidatesShownState(pinyinMode);
+        if (candidateView == null || !pinyinMode) {
             return;
         }
 
-        candidateBar.removeAllViews();
-
-        // 拼音提示（不可点，次要色）
-        candidateBar.addView(newCandidateTextView(r.display, false, -1));
-
-        // 候选词（可点；首个琥珀渐变高亮）
-        List<String> cands = r.candidates;
-        if (cands.isEmpty()) {
-            candidateBar.addView(newCandidateTextView(getString(R.string.no_candidate), false, -1));
+        // 缓冲为空：展示操作引导（候选栏不再空白）
+        if (pinyin.length() == 0) {
+            candidateView.showHint(getString(R.string.hint_morse_input));
+            return;
+        }
+        // 缓冲有拼音：展示切分结果 + 候选词条（首候选高亮）
+        if (r.candidates.isEmpty()) {
+            candidateView.showNoCandidate(r.display, getString(R.string.no_candidate));
         } else {
-            for (int i = 0; i < cands.size(); i++) {
-                candidateBar.addView(newCandidateTextView(cands.get(i), true, i));
-            }
+            candidateView.showCandidates(r.display, r.candidates);
         }
-        if (candidateScroll != null) {
-            candidateScroll.scrollTo(0, 0);
-        }
-        setCandidatesViewShown(true);
     }
 
-    private TextView newCandidateTextView(final String text, final boolean clickable, final int index) {
-        TextView tv = new TextView(getApplicationContext());
-        tv.setText(text);
-        tv.setTextSize(21);
-        tv.setSingleLine(true);
-        tv.setGravity(android.view.Gravity.CENTER_VERTICAL);
-
-        if (clickable) {
-            if (index == 0) {
-                // 首个候选：琥珀渐变高亮、深色文字
-                tv.setBackgroundResource(R.drawable.cand_first_selector);
-                tv.setTextColor(colorRes(R.color.text_on_amber));
-                tv.setPadding(dp(14), 0, dp(14), 0);
-            } else {
-                // 其余候选：深色底 + 细边框、主色文字
-                tv.setBackgroundResource(R.drawable.candidate_key_bg);
-                tv.setTextColor(colorRes(R.color.text_primary));
-                tv.setPadding(dp(12), 0, dp(12), 0);
-            }
-            tv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    commitCandidate(index);
-                }
-            });
-            tv.setLayoutParams(itemLayoutParams());
-        } else {
-            // 拼音提示 / 无匹配提示：次要提示色，无词条框
-            tv.setTextColor(colorRes(R.color.text_secondary));
-            tv.setPadding(dp(8), 0, dp(8), 0);
+    /** 只在显示状态变化时才开关候选栏，避免每次按键都触发布局重排 */
+    private void setCandidatesShownState(boolean shown) {
+        if (candidatesShownState == shown) {
+            return;
         }
-        return tv;
-    }
-
-    /** 候选词条布局参数：词条间留 6dp 间隙 */
-    private LinearLayout.LayoutParams itemLayoutParams() {
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        lp.setMargins(0, 0, dp(6), 0);
-        return lp;
+        candidatesShownState = shown;
+        setCandidatesViewShown(shown);
     }
 
     private void commitCandidate(int index) {
@@ -595,15 +550,6 @@ public class DotDashIMEService extends InputMethodService implements
     // ------------------------------------------------------------------
     // 工具
     // ------------------------------------------------------------------
-    @SuppressWarnings("deprecation")
-    private int colorRes(int resId) {
-        return getResources().getColor(resId);
-    }
-
-    private int dp(int value) {
-        return Math.round(value * getResources().getDisplayMetrics().density);
-    }
-
     private void buildMorseMap() {
         // 只保留字母与数字的标准摩斯码。标点与其它符号完全交给符号面板，
         // 与"符号系统完全脱离摩斯"的设计一致。
