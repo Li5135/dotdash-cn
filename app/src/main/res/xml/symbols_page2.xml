@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- 本文件由 tools/gen_symbol_pages.py 自动生成，请勿手改。 -->
 <Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
-    android:horizontalGap="0px"
-    android:verticalGap="0px">
+    android:horizontalGap="6dp"
+    android:verticalGap="6dp">
 
     <Row android:keyHeight="54dp" android:rowEdgeFlags="top">
         <Key android:keyLabel="⑨" android:keyWidth="12.500%" android:codes="9320" android:keyEdgeFlags="left" />

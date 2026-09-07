@@ -1,6 +1,5 @@
 package net.iowaline.dotdash.cn;
 
-import android.content.Context;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
@@ -74,6 +73,7 @@ public class DotDashIMEService extends InputMethodService implements
     // 界面
     // ------------------------------------------------------------------
     private KeyboardView inputView;
+    private DotDashKeyboardView keyboardOverlay;
     private Keyboard dotDashKeyboard;
     private final List<Keyboard> symbolKeyboards = new ArrayList<>();
     private int symbolPage = 0;
@@ -162,11 +162,23 @@ public class DotDashIMEService extends InputMethodService implements
 
     @Override
     public View onCreateInputView() {
-        inputView = (KeyboardView) getLayoutInflater().inflate(R.layout.input, null);
+        View root = getLayoutInflater().inflate(R.layout.input, null);
+        inputView = root.findViewById(R.id.keyboard);
         inputView.setOnKeyboardActionListener(this);
-        inputView.setKeyboard(dotDashKeyboard);
+        // 自绘层（视觉）与底层 KeyboardView（触摸/业务）绑定
+        keyboardOverlay = root.findViewById(R.id.keyboard_overlay);
+        keyboardOverlay.setHost(inputView);
+        bindKeyboard(dotDashKeyboard);
         refreshKeyLabels(true);
-        return inputView;
+        return root;
+    }
+
+    /** 切换当前键盘：底层 KeyboardView 与自绘层同步（仅 UI 联动，业务不变） */
+    private void bindKeyboard(Keyboard kbd) {
+        inputView.setKeyboard(kbd);
+        if (keyboardOverlay != null) {
+            keyboardOverlay.setKeyboard(kbd);
+        }
     }
 
     @Override
@@ -335,20 +347,20 @@ public class DotDashIMEService extends InputMethodService implements
 
     private void openSymbolPanel() {
         symbolPage = 0;
-        inputView.setKeyboard(symbolKeyboards.get(0));
+        bindKeyboard(symbolKeyboards.get(0));
         updateCandidates();
     }
 
     private void onSymbolKey(int code) {
         if (code == CODE_SYM_BACK) {
-            inputView.setKeyboard(dotDashKeyboard);
+            bindKeyboard(dotDashKeyboard);
             updateCandidates();
         } else if (code == CODE_SYM_PREV) {
             symbolPage = (symbolPage - 1 + symbolKeyboards.size()) % symbolKeyboards.size();
-            inputView.setKeyboard(symbolKeyboards.get(symbolPage));
+            bindKeyboard(symbolKeyboards.get(symbolPage));
         } else if (code == CODE_SYM_NEXT) {
             symbolPage = (symbolPage + 1) % symbolKeyboards.size();
-            inputView.setKeyboard(symbolKeyboards.get(symbolPage));
+            bindKeyboard(symbolKeyboards.get(symbolPage));
         } else if (code > 0) {
             // 普通字符/标点：直接上屏
             commitCodePoint(code);
@@ -390,17 +402,13 @@ public class DotDashIMEService extends InputMethodService implements
 
         candidateBar.removeAllViews();
 
-        // 拼音提示（不可点）
-        TextView hint = newCandidateTextView(r.display, false, -1);
-        hint.setTextColor(0xFF9E9E9E);
-        candidateBar.addView(hint);
+        // 拼音提示（不可点，次要色）
+        candidateBar.addView(newCandidateTextView(r.display, false, -1));
 
-        // 候选词（可点）
+        // 候选词（可点；首个琥珀渐变高亮）
         List<String> cands = r.candidates;
         if (cands.isEmpty()) {
-            TextView empty = newCandidateTextView(getString(R.string.no_candidate), false, -1);
-            empty.setTextColor(0xFF757575);
-            candidateBar.addView(empty);
+            candidateBar.addView(newCandidateTextView(getString(R.string.no_candidate), false, -1));
         } else {
             for (int i = 0; i < cands.size(); i++) {
                 candidateBar.addView(newCandidateTextView(cands.get(i), true, i));
@@ -413,24 +421,46 @@ public class DotDashIMEService extends InputMethodService implements
     }
 
     private TextView newCandidateTextView(final String text, final boolean clickable, final int index) {
-        Context ctx = getApplicationContext();
-        TextView tv = new TextView(ctx);
+        TextView tv = new TextView(getApplicationContext());
         tv.setText(text);
         tv.setTextSize(21);
-        tv.setTextColor(0xFFFFFFFF);
-        tv.setPadding(dp(10), 0, dp(10), 0);
-        tv.setGravity(android.view.Gravity.CENTER_VERTICAL);
         tv.setSingleLine(true);
+        tv.setGravity(android.view.Gravity.CENTER_VERTICAL);
+
         if (clickable) {
-            tv.setBackgroundResource(R.drawable.candidate_key_bg);
+            if (index == 0) {
+                // 首个候选：琥珀渐变高亮、深色文字
+                tv.setBackgroundResource(R.drawable.cand_first_selector);
+                tv.setTextColor(colorRes(R.color.text_on_amber));
+                tv.setPadding(dp(14), 0, dp(14), 0);
+            } else {
+                // 其余候选：深色底 + 细边框、主色文字
+                tv.setBackgroundResource(R.drawable.candidate_key_bg);
+                tv.setTextColor(colorRes(R.color.text_primary));
+                tv.setPadding(dp(12), 0, dp(12), 0);
+            }
             tv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     commitCandidate(index);
                 }
             });
+            tv.setLayoutParams(itemLayoutParams());
+        } else {
+            // 拼音提示 / 无匹配提示：次要提示色，无词条框
+            tv.setTextColor(colorRes(R.color.text_secondary));
+            tv.setPadding(dp(8), 0, dp(8), 0);
         }
         return tv;
+    }
+
+    /** 候选词条布局参数：词条间留 6dp 间隙 */
+    private LinearLayout.LayoutParams itemLayoutParams() {
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(0, 0, dp(6), 0);
+        return lp;
     }
 
     private void commitCandidate(int index) {
@@ -499,6 +529,10 @@ public class DotDashIMEService extends InputMethodService implements
         } catch (Exception ignored) {
             // 视图未就绪时忽略
         }
+        if (keyboardOverlay != null) {
+            // 键帽标签（空格/中英）变化后自绘层需重绘
+            keyboardOverlay.invalidate();
+        }
     }
 
     // ------------------------------------------------------------------
@@ -509,7 +543,7 @@ public class DotDashIMEService extends InputMethodService implements
         super.onStartInputView(info, restarting);
         clearPinyin();
         if (inputView != null) {
-            inputView.setKeyboard(dotDashKeyboard);
+            bindKeyboard(dotDashKeyboard);
         }
         refreshKeyLabels(true);
     }
@@ -519,7 +553,7 @@ public class DotDashIMEService extends InputMethodService implements
         super.onFinishInputView(finishingInput);
         clearPinyin();
         if (inputView != null) {
-            inputView.setKeyboard(dotDashKeyboard);
+            bindKeyboard(dotDashKeyboard);
         }
     }
 
@@ -561,6 +595,11 @@ public class DotDashIMEService extends InputMethodService implements
     // ------------------------------------------------------------------
     // 工具
     // ------------------------------------------------------------------
+    @SuppressWarnings("deprecation")
+    private int colorRes(int resId) {
+        return getResources().getColor(resId);
+    }
+
     private int dp(int value) {
         return Math.round(value * getResources().getDisplayMetrics().density);
     }

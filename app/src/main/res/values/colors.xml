@@ -1,23 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-/*
-**
-** Copyright 2012, The Android Open Source Project
-**
-** Licensed under the Apache License, Version 2.0 (the "License");
-** you may not use this file except in compliance with the License.
-** You may obtain a copy of the License at
-**
-**     http://www.apache.org/licenses/LICENSE-2.0
-**
-** Unless required by applicable law or agreed to in writing, software
-** distributed under the License is distributed on an "AS IS" BASIS,
-** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-** See the License for the specific language governing permissions and
-** limitations under the License.
-*/
+  深空电台 · 深色主题 色板
+  业务逻辑不涉及此处；仅供键盘/候选 UI 资源与代码取色。
 -->
-
 <resources>
-    <color name="key_text_color_holo">@android:color/white</color>
+    <!-- 面板与分区 -->
+    <color name="panel_bg">#0F131B</color>
+    <color name="cand_border">#1D2430</color>
+
+    <!-- 普通按键 -->
+    <color name="key_normal">#1B202B</color>
+    <color name="key_pressed">#2C3444</color>
+
+    <!-- 文字 -->
+    <color name="text_primary">#E9EDF2</color>
+    <color name="text_secondary">#8B93A3</color>
+    <color name="text_on_amber">#201500</color>
+
+    <!-- 点/划大键：琥珀橙渐变 -->
+    <color name="amber_start">#FFB020</color>
+    <color name="amber_end">#F57C00</color>
+    <color name="amber_pressed_start">#FFC94D</color>
+    <color name="amber_pressed_end">#FF8F00</color>
+    <color name="amber_glow">#66FFB020</color>
+
+    <!-- 分号提交键：青 -->
+    <color name="semi_bg">#17202A</color>
+    <color name="semi_bg_pressed">#223140</color>
+    <color name="semi_accent">#4DD0E1</color>
+
+    <!-- 退格 -->
+    <color name="delete_red">#FF6B6B</color>
 </resources>

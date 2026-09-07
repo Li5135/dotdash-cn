@@ -35,7 +35,7 @@ def collect():
                 continue
             for el in tree.getroot().iter():
                 tag = el.tag.rsplit("}", 1)[-1]
-                if tag in ("string", "string-array", "style", "array", "plurals"):
+                if tag in ("string", "string-array", "style", "array", "plurals", "color"):
                     nm = el.get("name")
                     if nm:
                         found.setdefault("string", set()).add(nm) if tag == "string" \

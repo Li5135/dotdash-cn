@@ -1,12 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 输入视图：只包含一个标准 KeyboardView（候选条由 IME 的候选区承载） -->
-<android.inputmethodservice.KeyboardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/keyboard"
+<!--
+  输入视图（双层结构，深空电台主题）：
+   - 底层 android.inputmethodservice.KeyboardView：透明，负责全部触摸/长按/按键回调（业务原样）；
+   - 顶层 net.iowaline.dotdash.cn.DotDashKeyboardView：自绘键帽并把触摸转发给底层。
+  候选条由 IME 的候选区承载。
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/keyboard_background_holo"
-    android:keyBackground="@drawable/dotdash_key"
-    android:keyTextColor="@color/key_text_color_holo"
-    android:keyTextSize="22sp"
-    android:labelTextSize="18sp" />
+    android:background="@drawable/kbd_panel_bg">
+
+    <android.inputmethodservice.KeyboardView
+        android:id="@+id/keyboard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:keyBackground="@android:color/transparent"
+        android:keyTextColor="@android:color/transparent"
+        android:keyTextSize="22sp"
+        android:labelTextSize="18sp" />
+
+    <net.iowaline.dotdash.cn.DotDashKeyboardView
+        android:id="@+id/keyboard_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</FrameLayout>

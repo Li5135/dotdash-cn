@@ -60,8 +60,8 @@ def gen(name, rows, total_pages, page_no):
     lines.append('<?xml version="1.0" encoding="utf-8"?>')
     lines.append("<!-- 本文件由 tools/gen_symbol_pages.py 自动生成，请勿手改。 -->")
     lines.append("<Keyboard xmlns:android=\"http://schemas.android.com/apk/res/android\"")
-    lines.append('    android:horizontalGap="0px"')
-    lines.append('    android:verticalGap="0px">')
+    lines.append('    android:horizontalGap="6dp"')
+    lines.append('    android:verticalGap="6dp">')
     lines.append("")
     first = True
     for row in rows:
